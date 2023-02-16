@@ -1,7 +1,7 @@
-from stockdataobject import StockDataObject
+from stockDataObject import StockDataObject
 from fundamentalDataObject import FundamentalDataObject
 
-API_POLYGON_KEY = "INSERT"
+API_POLYGON_KEY = "insert"
 
 
 print("Testing stock data object")
