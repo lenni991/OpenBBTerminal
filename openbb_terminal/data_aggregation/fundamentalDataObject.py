@@ -53,6 +53,7 @@ class FundamentalDataObject:
         if self.api_name == "polygon":
             self.fundamental_data = PolygonProvider().load_fundamental_data(
                 api_key=api_key,
+                api_name=self.api_name,
                 symbol=self.symbol,
             )
         else:
