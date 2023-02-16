@@ -1,12 +1,12 @@
-from stockDataObject import StockDataObject
-from fundamentalDataObject import FundamentalDataObject
+from stockDataModel import StockDataModel
+from fundamentalDataModel import FundamentalDataModel
 
-API_POLYGON_KEY = "insert"
+API_POLYGON_KEY = "replace"
 
 
 print("Testing stock data object")
 # create a stock object
-stockObject = StockDataObject()
+stockObject = StockDataModel()
 stockObject.load_from_api(
     api_key=API_POLYGON_KEY,
     api_name="polygon",
@@ -25,7 +25,7 @@ if stockObject.verified:
 
 # --------------------------------------------
 print("Testing fundamental data object")
-fundamentalObject = FundamentalDataObject()
+fundamentalObject = FundamentalDataModel()
 fundamentalObject.load_from_api(
     api_key=API_POLYGON_KEY,
     api_name="polygon",

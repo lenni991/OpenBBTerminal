@@ -6,7 +6,7 @@ from polygonProvider import PolygonProvider
 API_POLYGON_KEY = "INSERT"
 
 
-class StockDataObject:
+class StockDataModel:
     """OpenBB stock object"""
 
     def __init__(self):
