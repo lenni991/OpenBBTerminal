@@ -3,7 +3,7 @@ import numpy as np
 from polygonProvider import PolygonProvider
 
 
-API_POLYGON_KEY = "7bLS_SJL3phqLxk9sOMve7FewcLwyNDd"
+API_POLYGON_KEY = "INSERT"
 
 
 class StockDataObject:
