@@ -9,14 +9,14 @@ class PolygonProvider:
 
     def load_stock_data(
         self,
-        api: str,
+        api_key: str,
         symbol: str,
         start_date: str,
         end_date: str,
         weekly: bool,
         monthly: bool,
     ) -> pd.DataFrame:
-        self.api_key = api
+        self.api_key = api_key
         start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
         end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
 
@@ -61,3 +61,9 @@ class PolygonProvider:
         df_stock_candidate = df_stock_candidate.set_index("date")
 
         return df_stock_candidate
+
+    def load_fundamental_data(
+        self, api_key: str, api_name: str, symbol: str
+    ) -> pd.DataFrame:
+        print("Not implemented yet.")
+        pass

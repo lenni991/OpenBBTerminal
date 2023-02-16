@@ -64,12 +64,12 @@ class StockDataObject:
 
         if self.api_name == "polygon":
             self.stock_data = PolygonProvider().load_stock_data(
-                api_key,
-                self.symbol,
-                self.start_date,
-                self.end_date,
-                self.weekly,
-                self.monthly,
+                api_key=api_key,
+                symbol=self.symbol,
+                start_date=self.start_date,
+                end_date=self.end_date,
+                weekly=self.weekly,
+                monthly=self.monthly,
             )
 
         # check data

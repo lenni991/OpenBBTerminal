@@ -1,10 +1,12 @@
 from stockdataobject import StockDataObject
+from fundamentalDataObject import FundamentalDataObject
 
-API_POLYGON_KEY = "7bLS_SJL3phqLxk9sOMve7FewcLwyNDd"
+API_POLYGON_KEY = "INSERT"
 
+
+print("Testing stock data object")
 # create a stock object
 stockObject = StockDataObject()
-
 stockObject.load_from_api(
     api_key=API_POLYGON_KEY,
     api_name="polygon",
@@ -15,9 +17,17 @@ stockObject.load_from_api(
     monthly=False,
 )
 
-
-# stockObject
+# Check data within object
 if stockObject.verified:
     print(stockObject)
     print(stockObject.stock_schema)
     print(stockObject.stock_data.head())
+
+# --------------------------------------------
+print("Testing fundamental data object")
+fundamentalObject = FundamentalDataObject()
+fundamentalObject.load_from_api(
+    api_key=API_POLYGON_KEY,
+    api_name="polygon",
+    symbol="AAPL",
+)
