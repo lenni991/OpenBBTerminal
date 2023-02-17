@@ -61,4 +61,10 @@ class YahooProvider:
         df_stock_candidate = pd.DataFrame(
             data=df_stock_candidate, columns=df_stock_candidate_cols
         )
+        # df_stock_candidate.reset_index(inplace=True)
+        # df_stock_candidate = df_stock_candidate.rename(
+        #     columns={"(date, Daily)": "date"}
+        # )
+        df_stock_candidate = df_stock_candidate.rename_axis("date").reset_index()
+
         return df_stock_candidate

@@ -3,7 +3,7 @@ from fundamentalModel import FundamentalDataModel
 
 API_POLYGON_KEY = "INSERT"
 
-stock_source = "yahoo"
+stock_source = "polygon"
 
 print("Testing stock data object")
 # create a stock object

@@ -56,9 +56,10 @@ class PolygonProvider:
             }
         )
         df_stock_candidate["date"] = pd.to_datetime(df_stock_candidate.date, unit="ms")
+        df_stock_candidate["date"] = df_stock_candidate["date"].dt.date
         df_stock_candidate["Close"] = df_stock_candidate["Adj Close"]
-        df_stock_candidate = df_stock_candidate.sort_values(by="date")
-        df_stock_candidate = df_stock_candidate.set_index("date")
+        df_stock_candidate = df_stock_candidate.sort_values("date")
+        df_stock_candidate = df_stock_candidate.reset_index(drop=True)
 
         return df_stock_candidate
 
