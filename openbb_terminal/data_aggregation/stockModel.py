@@ -72,7 +72,6 @@ class StockDataModel:
 
         elif self.source == "yahoo":
             self.stock_data = YahooProvider().load_stock_data(
-                api_key=None,
                 symbol=self.symbol,
                 start_date=self.start_date,
                 end_date=self.end_date,
@@ -98,6 +97,10 @@ class StockDataModel:
 
     def _check_df(self):
         # Check if all columns are present in the schema
+        print("------------------------------------------------------------")
+        print("Validating Dataframe")
+        print(self.stock_data.head(5))
+        print("------------------------------------------------------------")
         missing_cols = (
             set(self.stock_schema.keys())
             - set(self.stock_data.columns)

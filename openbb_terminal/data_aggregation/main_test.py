@@ -1,9 +1,9 @@
 from stockModel import StockDataModel
 from fundamentalModel import FundamentalDataModel
 
-API_POLYGON_KEY = "INSERT_KEY_HERE"
+API_POLYGON_KEY = "INSERT"
 
-stock_source = "yahoo"
+stock_source = "polygon"
 
 print("Testing stock data object")
 # create a stock object
@@ -29,9 +29,8 @@ elif stock_source == "yahoo":
         monthly=False,
     )
 
-# Check data within object
+# Check data within object using its members
 if stockObject.verified:
-    print(stockObject)
     print(stockObject.stock_schema)
     print(stockObject.stock_data.head())
 
