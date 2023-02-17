@@ -64,3 +64,6 @@ custom_imports/*/*.csv
 
 # lightning logs
 lightning_logs/
+
+# caches object in memory
+cache/
