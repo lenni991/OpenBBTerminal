@@ -3,9 +3,6 @@ import numpy as np
 from polygonProvider import PolygonProvider
 
 
-API_POLYGON_KEY = "INSERT"
-
-
 class StockDataModel:
     """OpenBB stock object"""
 
@@ -23,7 +20,7 @@ class StockDataModel:
         }
 
         # metadata
-        self.api_name = None
+        self.source = None
         self.symbol = None
         self.start_date = None
         self.end_date = None
@@ -35,7 +32,7 @@ class StockDataModel:
     def load_from_api(
         self,
         api_key: str,
-        api_name: str,
+        source: str,
         symbol: str,
         start_date: str,
         end_date: str,
@@ -55,14 +52,14 @@ class StockDataModel:
         Returns:
             pd.DataFrame: stock data from API
         """
-        self.api_name = api_name
+        self.source = source
         self.symbol = symbol
         self.start_date = start_date
         self.end_date = end_date
         self.weekly = weekly
         self.monthly = monthly
 
-        if self.api_name == "polygon":
+        if self.source == "polygon":
             self.stock_data = PolygonProvider().load_stock_data(
                 api_key=api_key,
                 symbol=self.symbol,
@@ -71,6 +68,11 @@ class StockDataModel:
                 weekly=self.weekly,
                 monthly=self.monthly,
             )
+
+        # elif self.source == "YahooFinance":
+        #     df_stock_candidate = load_stock_yf(
+        #         symbol, start_date, end_date, weekly, monthly
+        #     )
 
         # check data
         result, msg = self._check_df()

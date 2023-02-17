@@ -63,7 +63,7 @@ class PolygonProvider:
         return df_stock_candidate
 
     def load_fundamental_data(
-        self, api_key: str, source: str, symbol: str
+        self, api_key: str, api_name: str, symbol: str
     ) -> pd.DataFrame:
         print("Not implemented yet.")
         pass

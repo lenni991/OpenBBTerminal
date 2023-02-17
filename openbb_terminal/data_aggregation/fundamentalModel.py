@@ -3,9 +3,6 @@ import numpy as np
 from polygonProvider import PolygonProvider
 
 
-API_POLYGON_KEY = "INSERT"
-
-
 class FundamentalDataModel:
     """OpenBB stock object"""
 
@@ -27,7 +24,7 @@ class FundamentalDataModel:
         }
 
         # metadata
-        self.api_name = None
+        self.source = None
         self.symbol = None
         self.fundamental_data = None
         self.verified = False
@@ -35,7 +32,7 @@ class FundamentalDataModel:
     def load_from_api(
         self,
         api_key: str,
-        api_name: str,
+        source: str,
         symbol: str,
     ) -> pd.DataFrame:
         """Load stock data from API
@@ -47,13 +44,13 @@ class FundamentalDataModel:
         Returns:
             pd.DataFrame: stock data from API
         """
-        self.api_name = api_name
+        self.source = source
         self.symbol = symbol
         self.fundamental_data = pd.DataFrame()
-        if self.api_name == "polygon":
+        if self.source == "polygon":
             self.fundamental_data = PolygonProvider().load_fundamental_data(
                 api_key=api_key,
-                api_name=self.api_name,
+                source=self.source,
                 symbol=self.symbol,
             )
         else:
