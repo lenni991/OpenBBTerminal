@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from polygonProvider import PolygonProvider
+from providers.polygon import PolygonProvider
 
 
 class FundamentalDataModel:

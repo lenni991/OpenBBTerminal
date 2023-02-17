@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-from polygonProvider import PolygonProvider
-from yahooProvider import YahooProvider
+from providers.polygon import PolygonProvider
+from providers.yahoo import YahooProvider
 
 
 class StockDataModel:

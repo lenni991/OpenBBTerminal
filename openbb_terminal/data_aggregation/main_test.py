@@ -1,5 +1,5 @@
-from stockModel import StockDataModel
-from fundamentalModel import FundamentalDataModel
+from models.stockModel import StockDataModel
+from models.fundamentalModel import FundamentalDataModel
 
 API_POLYGON_KEY = "INSERT"
 
