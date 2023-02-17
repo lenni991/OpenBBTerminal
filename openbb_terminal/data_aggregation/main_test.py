@@ -1,7 +1,7 @@
 from models.stockModel import StockDataModel
 from models.fundamentalModel import FundamentalDataModel
 
-API_POLYGON_KEY = "INSERT"
+API_POLYGON_KEY = "7bLS_SJL3phqLxk9sOMve7FewcLwyNDd"
 
 stock_source = "polygon"
 

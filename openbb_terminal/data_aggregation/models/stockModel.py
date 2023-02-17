@@ -2,23 +2,14 @@ import pandas as pd
 import numpy as np
 from providers.polygon import PolygonProvider
 from providers.yahoo import YahooProvider
+from schemas.stocks_schemas import schema
 
 
 class StockDataModel:
     """OpenBB stock object"""
 
     def __init__(self):
-        self.stock_schema = {  # base schema
-            "Volume": float,
-            "VolWeight Avg": float,
-            "Open": float,
-            "Adj Close": float,
-            "High": float,
-            "Low": float,
-            "Transactions": int,
-            "Close": float,
-            "date": "datetime64[ns]",
-        }
+        self.stock_schema = schema
 
         # metadata
         self.source = None
@@ -99,7 +90,6 @@ class StockDataModel:
         # Check if all columns are present in the schema
         print("------------------------------------------------------------")
         print("Validating Dataframe")
-        print(self.stock_data.head(5))
         print("------------------------------------------------------------")
         missing_cols = (
             set(self.stock_schema.keys())

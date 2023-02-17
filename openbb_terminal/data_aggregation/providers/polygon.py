@@ -55,7 +55,7 @@ class PolygonProvider:
                 "vw": "VolWeight Avg",
             }
         )
-        df_stock_candidate["date"] = pd.to_datetime(df_stock_candidate.date, unit="ms")
+        df_stock_candidate["date"] = pd.to_datetime(df_stock_candidate["date"])
         df_stock_candidate["date"] = df_stock_candidate["date"].dt.date
         df_stock_candidate["Close"] = df_stock_candidate["Adj Close"]
         df_stock_candidate = df_stock_candidate.sort_values("date")
@@ -67,4 +67,3 @@ class PolygonProvider:
         self, api_key: str, source: str, symbol: str
     ) -> pd.DataFrame:
         print("Not implemented yet.")
-        pass

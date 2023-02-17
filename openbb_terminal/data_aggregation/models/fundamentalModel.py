@@ -1,27 +1,14 @@
 import pandas as pd
 import numpy as np
 from providers.polygon import PolygonProvider
+from schemas.fundamentals_schema import schema
 
 
 class FundamentalDataModel:
     """OpenBB stock object"""
 
     def __init__(self):
-        self.fundamental_schema = {  # base schema
-            "price": float,
-            "beta": float,
-            "market_cap": float,
-            "exchange": str,
-            "industry": str,
-            "website": str,
-            "description": str,
-            "isin": str,
-            "eps": float,
-            "dividend_yield": float,
-            "free_cash_flow_yield": float,
-            "debt_equity": float,
-            "return_on_equity": float,
-        }
+        self.fundamental_schema = schema
 
         # metadata
         self.source = None
