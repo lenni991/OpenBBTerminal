@@ -1,21 +1,33 @@
 from stockModel import StockDataModel
 from fundamentalModel import FundamentalDataModel
 
-API_POLYGON_KEY = "INSERT"
+API_POLYGON_KEY = "INSERT_KEY_HERE"
 
+stock_source = "yahoo"
 
 print("Testing stock data object")
 # create a stock object
 stockObject = StockDataModel()
-stockObject.load_from_api(
-    api_key=API_POLYGON_KEY,
-    source="polygon",
-    symbol="AAPL",
-    start_date="2023-01-01",
-    end_date="2023-01-09",
-    weekly=False,
-    monthly=False,
-)
+if stock_source == "polygon":
+    stockObject.load_from_api(
+        api_key=API_POLYGON_KEY,
+        source="polygon",
+        symbol="AAPL",
+        start_date="2023-01-01",
+        end_date="2023-01-09",
+        weekly=False,
+        monthly=False,
+    )
+elif stock_source == "yahoo":
+    stockObject.load_from_api(
+        api_key=API_POLYGON_KEY,
+        source="yahoo",
+        symbol="AAPL",
+        start_date="2023-01-01",
+        end_date="2023-01-09",
+        weekly=False,
+        monthly=False,
+    )
 
 # Check data within object
 if stockObject.verified:

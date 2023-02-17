@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from polygonProvider import PolygonProvider
+from yahooProvider import YahooProvider
 
 
 class StockDataModel:
@@ -69,10 +70,15 @@ class StockDataModel:
                 monthly=self.monthly,
             )
 
-        # elif self.source == "YahooFinance":
-        #     df_stock_candidate = load_stock_yf(
-        #         symbol, start_date, end_date, weekly, monthly
-        #     )
+        elif self.source == "yahoo":
+            self.stock_data = YahooProvider().load_stock_data(
+                api_key=None,
+                symbol=self.symbol,
+                start_date=self.start_date,
+                end_date=self.end_date,
+                weekly=self.weekly,
+                monthly=self.monthly,
+            )
 
         # check data
         result, msg = self._check_df()
