@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import pandas as pd
 import yfinance as yf
 import os
@@ -26,8 +26,8 @@ class YahooProvider:
             int_string = "Monthly"
 
         # Win10 version of mktime cannot cope with dates before 1970
-        if os.name == "nt" and start_date < datetime.datetime(1970, 1, 1):
-            start_date = datetime.datetime(
+        if os.name == "nt" and start_date < datetime(1970, 1, 1):
+            start_date = datetime(
                 1970, 1, 2
             )  # 1 day buffer in case of timezone adjustments
 
