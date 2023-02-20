@@ -64,6 +64,27 @@ class PolygonProvider:
         return df_stock_candidate
 
     def load_fundamental_data(
-        self, api_key: str, source: str, symbol: str
+        self, api_key: str, symbol: str, date: str
     ) -> pd.DataFrame:
-        print("Not implemented yet.")
+        self.api_key = api_key
+        request_url = f"https://api.polygon.io/v3/reference/tickers/{symbol}?date={date}&apiKey={api_key}"
+        r = requests.get(request_url)
+        if r.status_code != 200:
+            print("[red]Error in polygon request[/red]")
+            return pd.DataFrame()
+
+        r_json = r.json()
+        if "results" not in r_json.keys():
+            print("[red]No results found in polygon reply.[/red]")
+            return pd.DataFrame()
+
+        # Remove the "address" field from the response object
+        r_json.pop("address", None)
+
+        response_obj = r_json["results"]
+        if "branding" in response_obj:
+            del response_obj["branding"]
+
+        df_fundamental_candidate = pd.DataFrame([response_obj])
+
+        return df_fundamental_candidate

@@ -9,7 +9,7 @@ class StockDataModel:
     """OpenBB stock object"""
 
     def __init__(self):
-        self.stock_schema = schema
+        self.schema = schema
 
         # metadata
         self.source = None
@@ -18,7 +18,7 @@ class StockDataModel:
         self.end_date = None
         self.weekly = None
         self.monthly = None
-        self.stock_data = None
+        self.data_frame = None
         self.verified = False
 
     def load_from_api(
@@ -52,7 +52,7 @@ class StockDataModel:
         self.monthly = monthly
 
         if self.source == "polygon":
-            self.stock_data = PolygonProvider().load_stock_data(
+            self.data_frame = PolygonProvider().load_stock_data(
                 api_key=api_key,
                 symbol=self.symbol,
                 start_date=self.start_date,
@@ -62,7 +62,7 @@ class StockDataModel:
             )
 
         elif self.source == "yahoo":
-            self.stock_data = YahooProvider().load_stock_data(
+            self.data_frame = YahooProvider().load_stock_data(
                 symbol=self.symbol,
                 start_date=self.start_date,
                 end_date=self.end_date,
@@ -74,7 +74,7 @@ class StockDataModel:
         result, msg = self._check_df()
         if result is False:
             self.verified = False
-            self.stock_data = None
+            self.data_frame = None
             print(msg)
         else:
             self.verified = True
@@ -92,32 +92,32 @@ class StockDataModel:
         print("Validating Dataframe")
         print("------------------------------------------------------------")
         missing_cols = (
-            set(self.stock_schema.keys())
-            - set(self.stock_data.columns)
-            - set([self.stock_data.index.name])
+            set(self.schema.keys())
+            - set(self.data_frame.columns)
+            - set([self.data_frame.index.name])
         )
         if missing_cols:
             return False, f"Missing columns: {missing_cols}"
 
         # Check data types
-        for col, dtype in self.stock_schema.items():
-            if col in self.stock_data.columns:
-                if not np.issubdtype(self.stock_data[col].dtype, dtype):
+        for col, dtype in self.schema.items():
+            if col in self.data_frame.columns:
+                if not np.issubdtype(self.data_frame[col].dtype, dtype):
                     self.verified = False
                     return (
                         False,
-                        f"Column {col} has incorrect data type. Expected {dtype}, but got {self.stock_data[col].dtype}",
+                        f"Column {col} has incorrect data type. Expected {dtype}, but got {self.data_frame[col].dtype}",
                     )
-            elif col == self.stock_data.index.name:
-                if not np.issubdtype(self.stock_data.index.dtype, dtype):
+            elif col == self.data_frame.index.name:
+                if not np.issubdtype(self.data_frame.index.dtype, dtype):
                     self.verified = False
                     return (
                         False,
-                        f"Index {col} has incorrect data type. Expected {dtype}, but got {self.stock_data.index.dtype}",
+                        f"Index {col} has incorrect data type. Expected {dtype}, but got {self.data_frame.index.dtype}",
                     )
 
         # Check for any null values
-        if self.stock_data.isnull().sum().sum() > 0:
+        if self.data_frame.isnull().sum().sum() > 0:
             self.verified = False
             return False, "Dataframe contains null values"
 

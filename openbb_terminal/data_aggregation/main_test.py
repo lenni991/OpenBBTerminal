@@ -1,8 +1,7 @@
 import joblib
 import os
-import shutil
 import glob
-import time
+import shutil
 
 from models.stockModel import StockDataModel
 from models.fundamentalModel import FundamentalDataModel
@@ -13,7 +12,7 @@ from models.fundamentalModel import FundamentalDataModel
 # -----------------------------------------------
 # total memory of 100 mb
 total_allowable_cache_size = 1e8  # 100
-remove_cache = False
+remove_cache = True
 cachedir = os.path.join(os.getcwd(), "cache")
 memory = joblib.Memory(
     location=cachedir, verbose=0
@@ -42,6 +41,7 @@ if remove_cache:
     print("--------------------")
     memory.clear(warn=False)
 
+
 # -----------------------------------------------
 # Define cache creation functions
 # -----------------------------------------------
@@ -54,6 +54,8 @@ def create_stock_object(api_key, source, symbol, start_date, end_date, weekly, m
         print(f"Object with parameters {temp_cache_name} already exists in cache.")
         print("--------------------")
         return None
+        # TODO: maybe check internal data to see if it is equal?
+        # TODO: maybe save with a timestamp and check that?
     else:
         print("--------------------")
         print(f"Object with parameters {temp_cache_name} does not exist in cache.")
@@ -72,7 +74,7 @@ def create_stock_object(api_key, source, symbol, start_date, end_date, weekly, m
 
         # Check data within object using its members
         if data_object.verified:
-            print(data_object.stock_data.head())
+            print(data_object.data_frame.head())
             # Cache object if verified
             current_cache_size = check_cache_size()
             if current_cache_size > total_allowable_cache_size:
@@ -87,14 +89,16 @@ def create_stock_object(api_key, source, symbol, start_date, end_date, weekly, m
 
 
 @memory.cache
-def create_fundamental_object(api_key, source, symbol):
-    temp_cache_name = f"fundamental_{source}_{symbol}.joblib"
+def create_fundamental_object(api_key, source, symbol, date):
+    temp_cache_name = f"fundamental_{source}_{symbol}_{date}.joblib"
     cache_path = os.path.join(cachedir, temp_cache_name)
     if os.path.exists(cache_path):
         print("--------------------")
         print(f"Object with parameters {temp_cache_name} already exists in cache.")
         print("--------------------")
         return None
+        # TODO: maybe check internal data to see if it is equal?
+        # TODO: maybe save with a timestamp and check that?
     else:
         print("--------------------")
         print(f"Object with parameters {temp_cache_name} does not exist in cache.")
@@ -105,10 +109,11 @@ def create_fundamental_object(api_key, source, symbol):
             api_key=api_key,
             source=source,
             symbol=symbol,
+            date=date,
         )
 
         if data_object.verified:
-            print(data_object.fundamental_data)
+            print(data_object.data_frame.head())
             # Cache object if verified
             current_cache_size = check_cache_size()
             if current_cache_size > total_allowable_cache_size:
@@ -123,7 +128,6 @@ def create_fundamental_object(api_key, source, symbol):
 
 
 if __name__ == "__main__":
-
     # -----------------------------------------------
     # Set up API keys
     # -----------------------------------------------
@@ -136,7 +140,7 @@ if __name__ == "__main__":
     # user input
     ticker = "AAPL"
     s_d = "2023-01-01"
-    e_d = "2023-01-09"
+    e_d = "2023-01-10"
     w = False
     m = False
 
@@ -157,20 +161,39 @@ if __name__ == "__main__":
     print("Creating and caching fundamental data object")
     print("--------------------")
     fundamentalObject = create_fundamental_object(
-        api_key=API_KEY,
-        source=requested_source,
-        symbol="AAPL",
+        api_key=API_KEY, source=requested_source, symbol=ticker, date=e_d
     )
 
-    # Load cached objects with specific names
-    cache_name = f"stock_{requested_source}_{ticker}_{s_d}_{e_d}.joblib"
-    cached_stock = joblib.load(os.path.join(cachedir, cache_name))
+    # try to load cached objects and if no exception, use them
+    try:
+        # Load cached objects with specific names
+        cache_name = f"stock_{requested_source}_{ticker}_{s_d}_{e_d}.joblib"
+        cached_stock = joblib.load(os.path.join(cachedir, cache_name))
+    except FileNotFoundError:
+        print("--------------------")
+        print("Cached stock object not found")
+        print("--------------------")
+        cached_stock = None
+
+    try:
+        cache_name = f"fundamental_{requested_source}_{ticker}_{e_d}.joblib"
+        cached_fundamentals = joblib.load(os.path.join(cachedir, cache_name))
+    except FileNotFoundError:
+        print("--------------------")
+        print("Cached fundamental object not found")
+        print("--------------------")
+        cached_fundamentals = None
 
     # Use cached objects
     print("--------------------")
-    print("Using cached objects")
+    print("Using cached stock ticker object")
     print("--------------------")
-    print(cached_stock.stock_data.head())
+    print(cached_stock.data_frame.head())
+
+    print("--------------------")
+    print("Using cached fundamentals object")
+    print("--------------------")
+    print(cached_fundamentals.data_frame.head())
 
     # Remove cached objects
     if remove_cache:
@@ -178,3 +201,5 @@ if __name__ == "__main__":
         print("Removing cached objects")
         print("--------------------")
         memory.clear(warn=False)
+        # remove the cache directory
+        shutil.rmtree(cachedir)
