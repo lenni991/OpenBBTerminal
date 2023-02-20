@@ -2,10 +2,13 @@ import joblib
 import os
 import glob
 import shutil
+from dotenv import load_dotenv
 
 from models.stockModel import StockDataModel
 from models.fundamentalModel import FundamentalDataModel
 
+# Temp env file for loading api keys
+load_dotenv("keys.env")
 
 # -----------------------------------------------
 # Set up caching
@@ -133,7 +136,7 @@ if __name__ == "__main__":
     # -----------------------------------------------
     requested_source = "polygon"
     if requested_source == "polygon":
-        API_KEY = "insert"
+        API_KEY = os.getenv("POLYGON_API_KEY")
     elif requested_source == "yahoo":
         API_KEY = None
 
