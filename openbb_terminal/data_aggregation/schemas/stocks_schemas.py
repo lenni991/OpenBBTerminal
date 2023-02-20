@@ -1,4 +1,5 @@
 from datetime import datetime
+import numpy as np
 
 schema = {
     "Volume": float,
@@ -7,7 +8,7 @@ schema = {
     "Adj Close": float,
     "High": float,
     "Low": float,
-    "Transactions": int,
+    "Transactions": np.int64,
     "Close": float,
     "date": datetime,
 }
