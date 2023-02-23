@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from providers.polygon import PolygonProvider
+from providerFactory import ApiFactory
 from schemas.fundamentals_schema import schema
 
 
@@ -37,14 +37,13 @@ class FundamentalDataModel:
         self.symbol = symbol
         self.date = date
         self.data_frame = pd.DataFrame()
-        if self.source == "polygon":
-            self.data_frame = PolygonProvider().load_fundamental_data(
-                api_key=api_key,
-                symbol=self.symbol,
-                date=self.date,
-            )
-        else:
-            raise ValueError("API not supported")
+
+        api_provider = ApiFactory.create(self.source)
+        self.data_frame = api_provider.load_fundamental_data(
+            api_key=api_key,
+            symbol=self.symbol,
+            date=self.date,
+        )
 
         # check data
         result, msg = self._check_df()

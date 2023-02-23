@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
-from providers.polygon import PolygonProvider
-from providers.yahoo import YahooProvider
+from providerFactory import ApiFactory
 from schemas.stocks_schemas import schema
 
 
@@ -51,24 +50,16 @@ class StockDataModel:
         self.weekly = weekly
         self.monthly = monthly
 
-        if self.source == "polygon":
-            self.data_frame = PolygonProvider().load_stock_data(
-                api_key=api_key,
-                symbol=self.symbol,
-                start_date=self.start_date,
-                end_date=self.end_date,
-                weekly=self.weekly,
-                monthly=self.monthly,
-            )
+        api_provider = ApiFactory.create(self.source)
 
-        elif self.source == "yahoo":
-            self.data_frame = YahooProvider().load_stock_data(
-                symbol=self.symbol,
-                start_date=self.start_date,
-                end_date=self.end_date,
-                weekly=self.weekly,
-                monthly=self.monthly,
-            )
+        self.data_frame = api_provider.load_stock_data(
+            api_key=api_key,
+            symbol=self.symbol,
+            start_date=self.start_date,
+            end_date=self.end_date,
+            weekly=self.weekly,
+            monthly=self.monthly,
+        )
 
         # check data
         result, msg = self._check_df()
