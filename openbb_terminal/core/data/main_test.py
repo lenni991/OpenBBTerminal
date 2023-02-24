@@ -4,8 +4,8 @@ import glob
 import shutil
 from dotenv import load_dotenv
 
-from models.stockModel import StockDataModel
-from models.fundamentalModel import FundamentalDataModel
+from models.stock_model import StockDataModel
+from models.fundamental_model import FundamentalDataModel
 
 # Temp env file for loading api keys
 load_dotenv("keys.env")
@@ -160,6 +160,7 @@ if __name__ == "__main__":
         weekly=w,
         monthly=m,
     )
+
     print("--------------------")
     print("Creating and caching fundamental data object")
     print("--------------------")

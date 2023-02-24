@@ -1,6 +1,5 @@
 import pandas as pd
-import numpy as np
-from providerFactory import ApiFactory
+from provider_factory import ApiFactory
 from schemas.fundamentals_schema import schema
 
 
@@ -81,7 +80,8 @@ class FundamentalDataModel:
                         self.verified = False
                         return (
                             False,
-                            f"Column '{col}' has incorrect data type. Expected {dtype}, but got {self.data_frame[col].dtype}",
+                            f"Column '{col}' has incorrect data type.",
+                            f"Expected {dtype}, but got {self.data_frame[col].dtype}",
                         )
             elif col == self.data_frame.index.name:
                 if self.data_frame.index.dtype != dtype:

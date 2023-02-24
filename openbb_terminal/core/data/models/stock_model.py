@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from providerFactory import ApiFactory
+from provider_factory import ApiFactory
 from schemas.stocks_schemas import schema
 
 
