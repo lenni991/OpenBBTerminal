@@ -1,5 +1,6 @@
 """OpenBB Terminal SDK Helpers."""
 import json
+from inspect import signature
 from logging import Logger, getLogger
 from typing import Any, Callable, Dict, Optional
 
@@ -51,23 +52,49 @@ def class_repr(cls_dict: Dict[str, Any]) -> list:
     ]
 
 
-def helptext(func: Callable) -> Callable:
-    """Wrapper to preserve the help text of the function."""
+class Operation:
+    def __init__(self, name: str, trail: str, func: Callable) -> None:
+        self._trail = trail
+        self._method = func
+        self._name = name
 
-    def decorator(f: Callable) -> Callable:
         for attr in [
             "__doc__",
             "__name__",
             "__annotations__",
-            "__module__",
             "__defaults__",
             "__kwdefaults__",
-            "__dict__",
+            "__module__",
         ]:
-            setattr(f, attr, getattr(func, attr))
-        return f
+            setattr(self.__class__, attr, getattr(func, attr))
+            setattr(self, attr, getattr(func, attr))
 
-    return decorator
+        self.__signature__ = signature(func)
+        self.__class__.__signature__ = signature(func)
+
+    def __call__(self, *args: Any, **kwargs: Any) -> Any:
+        method = self._method
+
+        # We make a copy of the kwargs to avoid modifying the original
+        log_kwargs = kwargs.copy()
+        log_kwargs["chart"] = "chart" in self._name
+
+        operation_logger = OperationLogger(
+            trail=self._trail, method_chosen=method, args=args, kwargs=log_kwargs
+        )
+        operation_logger.log_before_call()
+        method_result = method(*args, **kwargs)
+        operation_logger.log_after_call(method_result=method_result)
+
+        return method_result
+
+    def about(self):
+        # pylint: disable=C0415
+        import webbrowser
+
+        trail = "/".join(self._trail.split("."))
+        url = f"https://docs.openbb.co/sdk/reference/{trail}"
+        webbrowser.open(url)
 
 
 class Category:
@@ -93,33 +120,27 @@ class Category:
         """We override the __getattribute__ method and wrap all callable
         attributes with a wrapper that logs the call and the result.
         """
-        if name.startswith("_"):
-            return super().__getattribute__(name)
-
         attr = super().__getattribute__(name)
+        if isinstance(attr, Operation) or name.startswith("__"):
+            return attr
+
         trail = f"{self.__class__._location_path}.{name}"
 
-        if callable(attr):
+        if callable(attr) and not isinstance(attr, Operation):
+            # We set the attribute to the wrapped function so that we don't
+            # have to wrap it when called again.
+            setattr(self, name, Operation(name=name, trail=trail, func=attr))
+            return getattr(self, name)
 
-            @helptext(attr)
-            def wrapper(*args, **kwargs):
-                method = attr
-
-                # We make a copy of the kwargs to avoid modifying the original
-                log_kwargs = kwargs.copy()
-                log_kwargs["chart"] = "chart" in name
-
-                operation_logger = OperationLogger(
-                    trail=trail, method_chosen=method, args=args, kwargs=log_kwargs
-                )
-                operation_logger.log_before_call()
-                method_result = method(*args, **kwargs)
-                operation_logger.log_after_call(method_result=method_result)
-
-                return method_result
-
-            return wrapper
         return attr
+
+    def about(self):
+        # pylint: disable=C0415
+        import webbrowser
+
+        trail = "/".join(self._location_path.split("."))
+        url = f"https://docs.openbb.co/sdk/reference/{trail}"
+        webbrowser.open(url)
 
 
 class OperationLogger:
@@ -324,6 +345,7 @@ from openbb_terminal.sdk_core import (
     controllers as ctrl,
     models as model,
 )
+from openbb_terminal import feature_flags as obbff
 from openbb_terminal.session.user import User
 
 if User.is_guest():

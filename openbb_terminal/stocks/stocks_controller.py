@@ -264,7 +264,8 @@ class StocksController(StockBaseController):
             "--ticker",
             action="store",
             dest="s_ticker",
-            required="-h" not in other_args and not self.ticker,
+            required=not any(x in other_args for x in ["-h", "--help"])
+            and not self.ticker,
             help="Ticker to get data for",
         )
         parser.add_argument(
@@ -276,9 +277,8 @@ class StocksController(StockBaseController):
             dest="exchange",
         )
 
-        if not self.ticker:
-            if other_args and "-" not in other_args[0][0]:
-                other_args.insert(0, "-t")
+        if not self.ticker and other_args and "-" not in other_args[0][0]:
+            other_args.insert(0, "-t")
         ns_parser = self.parse_known_args_and_warn(parser, other_args)
 
         if ns_parser:
@@ -363,7 +363,8 @@ class StocksController(StockBaseController):
             help="Ticker to analyze",
             type=str,
             default=None,
-            required="-h" not in other_args and not self.ticker,
+            required=not any(x in other_args for x in ["-h", "--help"])
+            and not self.ticker,
         )
         parser.add_argument(
             "-p",
@@ -495,7 +496,8 @@ class StocksController(StockBaseController):
             "--ticker",
             action="store",
             dest="ticker",
-            required="-h" not in other_args and not self.ticker,
+            required=not any(x in other_args for x in ["-h", "--help"])
+            and not self.ticker,
             help="Ticker to get data for",
         )
         parser.add_argument(
