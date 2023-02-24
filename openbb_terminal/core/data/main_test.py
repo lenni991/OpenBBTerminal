@@ -65,7 +65,7 @@ def create_stock_object(api_key, source, symbol, start_date, end_date, weekly, m
         print("Creating object...")
         print("--------------------")
         data_object = StockDataModel()
-        data_object.load_from_api(
+        data_object.load_from_provider(
             api_key=api_key,
             source=source,
             symbol=symbol,
@@ -108,7 +108,7 @@ def create_fundamental_object(api_key, source, symbol, date):
         print("Creating object...")
         print("--------------------")
         data_object = FundamentalDataModel()
-        data_object.load_from_api(
+        data_object.load_from_provider(
             api_key=api_key,
             source=source,
             symbol=symbol,

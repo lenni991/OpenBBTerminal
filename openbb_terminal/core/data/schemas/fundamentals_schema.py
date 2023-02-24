@@ -1,4 +1,12 @@
-schema = {
+key_executives = {
+    "Key Executives": dict,
+    "Key Executives Name": str,
+    "Key Executives Title": str,
+    "Key Executives Title Since": str,
+    "Key Executives Year Born": str,
+}
+
+company_profile = {
     "active": bool,
     "address": dict,
     "cik": str,

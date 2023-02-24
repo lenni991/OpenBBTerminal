@@ -1,13 +1,13 @@
 import pandas as pd
 from provider_factory import ApiFactory
-from schemas.fundamentals_schema import schema
+from schemas.fundamentals_schema import company_profile
 
 
 class FundamentalDataModel:
     """OpenBB stock object"""
 
     def __init__(self):
-        self.schema = schema
+        self.schema = company_profile
 
         # metadata
         self.source = None
@@ -16,7 +16,7 @@ class FundamentalDataModel:
         self.data_frame = None
         self.verified = False
 
-    def load_from_api(
+    def load_from_provider(
         self,
         api_key: str,
         source: str,

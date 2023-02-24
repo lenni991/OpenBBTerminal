@@ -1,14 +1,14 @@
 import pandas as pd
 import numpy as np
 from provider_factory import ApiFactory
-from schemas.stocks_schemas import schema
+from schemas.prices_schema import stock_prices
 
 
 class StockDataModel:
     """OpenBB stock object"""
 
     def __init__(self):
-        self.schema = schema
+        self.schema = stock_prices
 
         # metadata
         self.source = None
@@ -20,7 +20,7 @@ class StockDataModel:
         self.data_frame = None
         self.verified = False
 
-    def load_from_api(
+    def load_from_provider(
         self,
         api_key: str,
         source: str,
